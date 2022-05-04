@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>Wholesale_base</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Template\Deliveries.png" />
+    <None Remove="Template\Order.png" />
+    <None Remove="Template\Product.png" />
+    <None Remove="Template\User.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DB\DB.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Template\Deliveries.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Template\Order.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Template\Product.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Template\User.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MVVM\Model\" />
+    <Folder Include="MVVM\View\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+  </ItemGroup>
+
+</Project>
