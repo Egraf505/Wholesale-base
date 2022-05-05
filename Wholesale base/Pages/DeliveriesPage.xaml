@@ -8,11 +8,75 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="DeliveriesPage">
 
+    <Page.Resources>
+        <Style x:Key="BaseButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="10" Background="#004A7C" BorderThickness="1"
+                               Padding="2" BorderBrush="#E8F1F5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                            </ContentPresenter>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                            <Trigger Property="IsDefault" Value="True">
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="MaxHeight" Value="40"/>
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="FontSize" Value="20"/>
+
+
+
+        </Style>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <viewmodel:DeliveriesViewModel/>
+    </Page.DataContext>
+
     <Grid>
-        <TextBlock Text="Поставки"
-                   FontSize="30"
-                   Foreground="Black"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.10*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.25*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" LastChildFill="True">
+            <TextBlock Grid.Row="0" Text="Фильтр: " Margin="5"/>
+            <TextBox Grid.Row="0" Margin="5" Text="{Binding ProducerFilter, UpdateSourceTrigger=PropertyChanged}"/>
+        </DockPanel>
+
+
+        <DataGrid x:Name="ProducerTable" Grid.Row="1" Margin="25" AutoGenerateColumns="False" 
+                  ItemsSource="{Binding Deliveries}"
+                  IsReadOnly="True"
+                  SelectedItem="{Binding DeliveriesSelected, Mode=TwoWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№" Binding="{Binding Path=Id}" Width="90"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Path=Firstname}" Width="90"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Middlename}" Width="90"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding Path=Lastname}" Width="90"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DockPanel Grid.Row="2" LastChildFill="False">
+            <Button DockPanel.Dock="Left" Style="{StaticResource BaseButtonStyle}"
+                    Content="Добавить" Command="{Binding OnAdd}"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource BaseButtonStyle}"
+                    Content="Удалить"
+                    Command="{Binding OnDelete}"/>
+        </DockPanel>
     </Grid>
 </Page>
