@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using Wholesale_base.Windows;
 
@@ -19,14 +20,9 @@ namespace Wholesale_base.MVVM.ViewModel
 
         private ObservableCollection<Producer> _producers;
 
-        public ObservableCollection<Producer> Producers
+        public ICollectionView Producers
         {
-            get { return _producers; }
-            set 
-            { 
-                _producers = value;
-                OnPropertyChanged();
-            }
+            get;
         }
 
         private Producer _producerSelected;
@@ -40,12 +36,52 @@ namespace Wholesale_base.MVVM.ViewModel
             }
         }
 
+        private string _producerFilter = string.Empty;
+        public string ProducerFilter
+        {
+            get { return _producerFilter; }
+            set 
+            { 
+                _producerFilter = value; 
+                OnPropertyChanged();
+                Producers.Refresh();
+            }
+        }
+
         public ProducerViewModel()
         {
             using (WholesalebaseContext context = new WholesalebaseContext())
             {
                _producers = new ObservableCollection<Producer>(context.Producers.ToList());
+            }         
+
+            Producers = CollectionViewSource.GetDefaultView(_producers);
+
+            Producers.Filter = FilterProducer;
+            Producers.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Producer.Middlename)));
+            Producers.SortDescriptions.Add(new SortDescription(nameof(Producer.Firstname), ListSortDirection.Ascending));
+        }
+
+        private bool FilterProducer(object obj)
+        {
+            if (obj is Producer producer)
+            {
+                return producer.Firstname.Contains(ProducerFilter, StringComparison.InvariantCultureIgnoreCase) || 
+                    producer.Middlename.Contains(ProducerFilter, StringComparison.InvariantCultureIgnoreCase);
             }
+            return false;
+        }
+
+        private void OnUpdateCollection(WholesalebaseContext context)
+        {
+            var producers = new ObservableCollection<Producer>(context.Producers.ToList());
+            _producers.Clear();
+
+            foreach (var item in producers)
+            {
+                _producers.Add(item);
+            }
+            Producers.Refresh();
         }
 
         public ICommand OnAdd
@@ -65,7 +101,8 @@ namespace Wholesale_base.MVVM.ViewModel
                                 context.SaveChanges();
 
                                 MessageBox.Show("Поставщик добавлен");
-                                Producers = new ObservableCollection<Producer>(context.Producers.ToList());
+
+                                OnUpdateCollection(context);
                             }
                         }
                     });              
@@ -85,7 +122,8 @@ namespace Wholesale_base.MVVM.ViewModel
                             context.Producers.Remove(ProducerSelected);                           
                             MessageBox.Show("Удаление успешно");
                             context.SaveChanges();
-                            Producers = new ObservableCollection<Producer>(context.Producers.ToList());                           
+
+                            OnUpdateCollection(context);
                         }
                     }
                     else
