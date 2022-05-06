@@ -54,8 +54,10 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" LastChildFill="True">
+            <!-- 
             <TextBlock Grid.Row="0" Text="Фильтр: " Margin="5"/>
-            <TextBox Grid.Row="0" Margin="5" Text="{Binding ProducerFilter, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="0" Margin="5" Text="{Binding DeliveriesFilter, UpdateSourceTrigger=PropertyChanged}"/>
+            -->
         </DockPanel>
 
 
@@ -65,9 +67,9 @@
                   SelectedItem="{Binding DeliveriesSelected, Mode=TwoWay}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="№" Binding="{Binding Path=Id}" Width="90"/>
-                <DataGridTextColumn Header="Имя" Binding="{Binding Path=Firstname}" Width="90"/>
-                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Middlename}" Width="90"/>
-                <DataGridTextColumn Header="Отчество" Binding="{Binding Path=Lastname}" Width="90"/>
+                <DataGridTextColumn Header="№ Поставщика" Binding="{Binding Path=IdProducer}" Width="100"/>
+                <DataGridTextColumn Header="Дата" Binding="{Binding Path=Data}" Width="130"/>
+                <DataGridTextColumn Header="Колличество" Binding="{Binding Path=Quantity}" Width="90"/>
             </DataGrid.Columns>
         </DataGrid>
 

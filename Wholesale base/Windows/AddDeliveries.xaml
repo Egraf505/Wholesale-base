@@ -4,9 +4,86 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wholesale_base.Windows"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="AddDeliveries" Height="450" Width="800">
+        Title="Добавить поставку" 
+        Height="300" 
+        Width="250"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5,0,5,0"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
+        <Style x:Key="BaseButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="8" Background="#004A7C" BorderThickness="0"
+                               Padding="2">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                            </ContentPresenter>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                            <Trigger Property="IsDefault" Value="True">
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinHeight" Value="10"/>
+            <Setter Property="MaxHeight" Value="35"/>
+            <Setter Property="MinWidth" Value="50"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.20*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="1" LastChildFill="False">
+            <Button IsCancel="True" DockPanel.Dock="Right" Content="отмена"
+                    Style="{StaticResource BaseButtonStyle}"/>
+            <Button IsDefault="True" DockPanel.Dock="Right" Content="ок"
+                    Style="{StaticResource BaseButtonStyle}"
+                    Click="Accept_Click"/>
+        </DockPanel>
+
+        <StackPanel Grid.Row="0" Orientation="Vertical">
+            <TextBlock Text="Поставщики: "/>
+            <ComboBox x:Name="DeliveriesProducer"                                          
+                      IsEditable="True"
+                      MinWidth="100"
+                      HorizontalAlignment="Left"
+                      Margin="5,0,0,0">
+                <ComboBoxItem>
+                    <TextBlock Text="{Binding Path=MiddleName}"/>
+                </ComboBoxItem>
+            </ComboBox>
+            <TextBlock Text="Дата: "/>
+            <TextBox x:Name="DeliveryData"
+                     Text="{Binding Source={x:Static sys:DateTime.Now}, Mode=OneWay,  StringFormat='dd-MM-yyyy HH:mm:ss'}"/>
+            <TextBlock Text="Колличество: "/>
+            <TextBox x:Name="DeliveryQuantity"/>
+        </StackPanel>
     </Grid>
 </Window>

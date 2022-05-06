@@ -55,21 +55,10 @@ namespace Wholesale_base.MVVM.ViewModel
             }
 
             Deliveries = CollectionViewSource.GetDefaultView(_deliveries);
-
-            Deliveries.Filter = FilterProducer;
-            Deliveries.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Producer.Middlename)));
-            Deliveries.SortDescriptions.Add(new SortDescription(nameof(Producer.Firstname), ListSortDirection.Ascending));
-        }
-
-        private bool FilterProducer(object obj)
-        {
-            if (obj is Producer producer)
-            {
-                return producer.Firstname.Contains(DeliveriesFilter, StringComparison.InvariantCultureIgnoreCase) ||
-                    producer.Middlename.Contains(DeliveriesFilter, StringComparison.InvariantCultureIgnoreCase);
-            }
-            return false;
-        }
+         
+            Deliveries.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Delivery.Data)));
+            Deliveries.SortDescriptions.Add(new SortDescription(nameof(Delivery.IdProducer), ListSortDirection.Ascending));
+        }      
 
         private void OnUpdateCollection(WholesalebaseContext context)
         {
@@ -89,20 +78,30 @@ namespace Wholesale_base.MVVM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    AddDeliveries addProducer = new AddDeliveries();
-                    if (addProducer.ShowDialog() == true)
-                    {
+                    AddDeliveries addDeliveries = new AddDeliveries();
+                    if (addDeliveries.ShowDialog() == true)
+                    {   
+                        DateTime datetime = DateTime.ParseExact(addDeliveries.Date, "dd-MM-yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                        int count = int.Parse(addDeliveries.Count);
                         using (WholesalebaseContext context = new WholesalebaseContext())
                         {
-                            //Producer producer = new Producer() { Firstname = addProducer.FirstName, Middlename = addProducer.MiddleName, Lastname = addProducer.LastName };
+                            Producer producer = context.Producers.FirstOrDefault(x => x.Middlename == addDeliveries.DeliveriesProducer.SelectedItem.ToString())!;
 
-                            //context.Producers.Add(producer);
-                            //context.SaveChanges();
+                            if (producer != null)
+                            {
+                                Delivery delivery = new Delivery() { IdProducer = producer.Id, Data = datetime, Quantity = count };
+                                context.Deliveries.Add(delivery);
+                                context.SaveChanges();
 
-                            MessageBox.Show("Поставка добавлена");
+                                MessageBox.Show("Поставка добавлена");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Поставщик отсуствует");
+                            }
 
                             OnUpdateCollection(context);
-                        }
+                        }                                              
                     }
                 });
             }
