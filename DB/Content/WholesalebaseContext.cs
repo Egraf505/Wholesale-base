@@ -44,8 +44,6 @@ namespace DB
 
                 entity.Property(e => e.IdProducer).HasColumnName("id_producer");
 
-                entity.Property(e => e.IdProduct).HasColumnName("id_product");
-
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 
                 entity.HasOne(d => d.IdProducerNavigation)

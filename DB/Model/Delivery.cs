@@ -12,7 +12,6 @@ namespace DB
 
         public int Id { get; set; }
         public int IdProducer { get; set; }
-        public int IdProduct { get; set; }
         public DateTime Data { get; set; }
         public int Quantity { get; set; }
 

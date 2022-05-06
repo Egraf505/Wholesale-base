@@ -11,20 +11,21 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using Wholesale_base.Windows;
 
 namespace Wholesale_base.MVVM.ViewModel
 {
     internal class DeliveriesViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<Producer> _deliveries;
+        private ObservableCollection<Delivery> _deliveries;
 
         public ICollectionView Deliveries
         {
             get;
         }
 
-        private Producer _deliveriesSelected;
-        public Producer DeliveriesSelected
+        private Delivery _deliveriesSelected;
+        public Delivery DeliveriesSelected
         {
             get { return _deliveriesSelected; }
             set
@@ -50,7 +51,7 @@ namespace Wholesale_base.MVVM.ViewModel
         {
             using (WholesalebaseContext context = new WholesalebaseContext())
             {
-                _deliveries = new ObservableCollection<Producer>(context.Producers.ToList());
+                _deliveries = new ObservableCollection<Delivery>(context.Deliveries.ToList());
             }
 
             Deliveries = CollectionViewSource.GetDefaultView(_deliveries);
@@ -72,10 +73,10 @@ namespace Wholesale_base.MVVM.ViewModel
 
         private void OnUpdateCollection(WholesalebaseContext context)
         {
-            var producers = new ObservableCollection<Producer>(context.Producers.ToList());
+            var deliveries = new ObservableCollection<Delivery>(context.Deliveries.ToList());
             _deliveries.Clear();
 
-            foreach (var item in producers)
+            foreach (var item in deliveries)
             {
                 _deliveries.Add(item);
             }
@@ -88,15 +89,15 @@ namespace Wholesale_base.MVVM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    AddProducer addProducer = new AddProducer();
+                    AddDeliveries addProducer = new AddDeliveries();
                     if (addProducer.ShowDialog() == true)
                     {
                         using (WholesalebaseContext context = new WholesalebaseContext())
                         {
-                            Producer producer = new Producer() { Firstname = addProducer.FirstName, Middlename = addProducer.MiddleName, Lastname = addProducer.LastName };
+                            //Producer producer = new Producer() { Firstname = addProducer.FirstName, Middlename = addProducer.MiddleName, Lastname = addProducer.LastName };
 
-                            context.Producers.Add(producer);
-                            context.SaveChanges();
+                            //context.Producers.Add(producer);
+                            //context.SaveChanges();
 
                             MessageBox.Show("Поставка добавлена");
 
@@ -117,7 +118,7 @@ namespace Wholesale_base.MVVM.ViewModel
                     {
                         using (WholesalebaseContext context = new WholesalebaseContext())
                         {
-                            context.Producers.Remove(DeliveriesSelected);
+                            context.Deliveries.Remove(DeliveriesSelected);
                             MessageBox.Show("Удаление успешно");
                             context.SaveChanges();
 
