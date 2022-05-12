@@ -15,6 +15,7 @@ namespace DB
         public int CountProductOnWarehouse { get; set; }
         public decimal Price { get; set; }
         public int Type { get; set; }
+        public string Description { get; set; } = null!;
 
         public virtual Delivery IdDeliveriesNavigation { get; set; } = null!;
         public virtual Type TypeNavigation { get; set; } = null!;

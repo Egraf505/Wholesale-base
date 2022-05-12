@@ -10,20 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Wholesale_base.MVVM.ViewModel;
 
-namespace Wholesale_base.Pages
+namespace Wholesale_base.Windows
 {
     /// <summary>
-    /// Interaction logic for ProductPage.xaml
+    /// Interaction logic for AddProduct.xaml
     /// </summary>
-    public partial class ProductPage : Page
+    public partial class AddProduct : Window
     {
-        public ProductPage()
+        public AddProduct()
         {
-            InitializeComponent();         
+            InitializeComponent();
         }
     }
 }

@@ -124,6 +124,10 @@ namespace DB
 
                 entity.Property(e => e.CountProductOnWarehouse).HasColumnName("count_product_on_warehouse");
 
+                entity.Property(e => e.Description)
+                    .HasMaxLength(50)
+                    .HasColumnName("description");
+
                 entity.Property(e => e.IdDeliveries).HasColumnName("id_deliveries");
 
                 entity.Property(e => e.Price)
