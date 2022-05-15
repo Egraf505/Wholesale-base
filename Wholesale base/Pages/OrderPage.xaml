@@ -77,6 +77,8 @@
         <DockPanel Grid.Row="2" LastChildFill="False">
             <Button DockPanel.Dock="Left" Style="{StaticResource BaseButtonStyle}"
                     Content="Добавить" Command="{Binding OnAdd}"/>
+            <Button DockPanel.Dock="Left" Style="{StaticResource BaseButtonStyle}"
+                    Content="Изменить статус" Command="{Binding OnUpdate}"/>
             <Button DockPanel.Dock="Right" Style="{StaticResource BaseButtonStyle}"
                     Content="Удалить"
                     Command="{Binding OnDelete}"/>

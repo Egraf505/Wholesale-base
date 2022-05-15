@@ -1,28 +1,19 @@
 ﻿using DB;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace Wholesale_base.Windows
 {
     /// <summary>
     /// Interaction logic for AddOrder.xaml
     /// </summary>
-    public partial class AddOrder : Window, INotifyPropertyChanged
+    public partial class AddOrder : Window
     {
         private List<Producer> _producers;
         private List<Product> _products;       
@@ -161,12 +152,6 @@ namespace Wholesale_base.Windows
             {
                 this.DialogResult = true;
             }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
+        }        
     }
 }

@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Wholesale_base.Windows;
+using Wholesale_base.MVVM.ViewModel;
 
 namespace Wholesale_base.MVVM.ViewModel
 {
@@ -95,18 +96,48 @@ namespace Wholesale_base.MVVM.ViewModel
                                 MessageBox.Show("Товар не найден");
                             }
                             else
-                            {
-                                //Условие к продукту
+                            {                                
                                 Order order = new Order() { IdProducerNavigation = producer!, IdProductNavigation = product!, Address = addOrder.OrderAddress.Text,
                                 Data = datetime, CountProduct = int.Parse(addOrder.OrderQuantity.Text), Status = 1};
                                 context.Orders.Add(order);
-                                context.SaveChanges();
+                                context.SaveChanges();                                 
 
                                 MessageBox.Show("Заказ добавлен");
                             }
 
                             OnUpdateCollection(context);
                         }
+                    }
+                });
+            }
+        }
+
+        public ICommand OnUpdate
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (SelectedOrder != null)
+                    {
+                        UpdateOrder updateOrder = new UpdateOrder();
+                        if (updateOrder.ShowDialog() == true)
+                        {
+                            using(WholesalebaseContext context = new WholesalebaseContext())
+                            {
+                                Status status = context.Statuses.FirstOrDefault(x => x.Name == updateOrder.OrderUpdateStatus.SelectedItem.ToString())!;
+                                Order product = context.Orders.FirstOrDefault(x => x.Id == SelectedOrder.Id)!;
+                                product.Status = status.Id;
+                                context.SaveChanges();
+
+                                MessageBox.Show("Изменение успешны");
+                                OnUpdateCollection(context);
+                            }                          
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Заказ не выбран");
                     }
                 });
             }
@@ -122,6 +153,10 @@ namespace Wholesale_base.MVVM.ViewModel
                     {
                         using (WholesalebaseContext context = new WholesalebaseContext())
                         {
+                            Product product = context.Products.FirstOrDefault(x => x.Id == SelectedOrder.IdProduct)!;
+                            product.CountProductOnWarehouse += SelectedOrder.CountProduct;
+                            context.SaveChanges(true);
+
                             context.Orders.Remove(SelectedOrder);
                             MessageBox.Show("Удаление успешно");
                             context.SaveChanges();
@@ -131,7 +166,7 @@ namespace Wholesale_base.MVVM.ViewModel
                     }
                     else
                     {
-                        MessageBox.Show("Поставщик не выбран");
+                        MessageBox.Show("Заказ не выбран");
                     }
                 });
             }

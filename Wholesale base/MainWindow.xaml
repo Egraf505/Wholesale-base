@@ -29,7 +29,13 @@
                             </Trigger>
                             <Trigger Property="IsDefault" Value="True">
                                 <Setter Property="Cursor" Value="Arrow"/>
-                            </Trigger>           
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#00347C"/>
+                            </Trigger>
+                            <Trigger Property="IsCancel" Value="False">
+                                <Setter Property="Background" Value="#004A7C"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                         
                     </ControlTemplate>
