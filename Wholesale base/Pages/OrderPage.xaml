@@ -3,16 +3,83 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Wholesale_base.Pages"
+      xmlns:local="clr-namespace:Wholesale_base.Pages" xmlns:viewmodel="clr-namespace:Wholesale_base.MVVM.ViewModel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="OrderPage">
+      Title="ProducerPage">
+
+    <Page.Resources>
+        <Style x:Key="BaseButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="10" Background="#004A7C" BorderThickness="1"
+                               Padding="2" BorderBrush="#E8F1F5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                            </ContentPresenter>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                            <Trigger Property="IsDefault" Value="True">
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="MaxHeight" Value="40"/>
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="FontSize" Value="20"/>
+
+
+
+        </Style>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <viewmodel:OrderViewModel/>
+    </Page.DataContext>
 
     <Grid>
-        <TextBlock Text="Заказы"
-                   FontSize="30"
-                   Foreground="Black"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.10*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.25*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" LastChildFill="True">
+            <TextBlock Grid.Row="0" Text="Фильтр: " Margin="5"/>
+            <TextBox Grid.Row="0" Margin="5" Text="{Binding ProducerFilter, UpdateSourceTrigger=PropertyChanged}"/>
+        </DockPanel>
+
+
+        <DataGrid x:Name="ProducerTable" Grid.Row="1" Margin="25" AutoGenerateColumns="False" 
+                  ItemsSource="{Binding Orders}"
+                  IsReadOnly="True"
+                  SelectedItem="{Binding SelectedOrder, Mode=TwoWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№" Binding="{Binding Path=Id}" Width="Auto"/>
+                <DataGridTextColumn Header="№ Поставщика" Binding="{Binding Path=IdProducer}" Width="Auto"/>
+                <DataGridTextColumn Header="№ товара" Binding="{Binding Path=IdProduct}" Width="Auto"/>
+                <DataGridTextColumn Header="Колл. товара" Binding="{Binding Path=CountProduct}" Width="Auto"/>
+                <DataGridTextColumn Header="Дата" Binding="{Binding Path=Data}" Width="Auto"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding Path=Status}" Width="Auto"/>
+                <DataGridTextColumn Header="Адрес" Binding="{Binding Path=Address}" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DockPanel Grid.Row="2" LastChildFill="False">
+            <Button DockPanel.Dock="Left" Style="{StaticResource BaseButtonStyle}"
+                    Content="Добавить" Command="{Binding OnAdd}"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource BaseButtonStyle}"
+                    Content="Удалить"
+                    Command="{Binding OnDelete}"/>
+        </DockPanel>
     </Grid>
 </Page>

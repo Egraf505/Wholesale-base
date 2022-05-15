@@ -1,15 +1,17 @@
-﻿<Window x:Class="Wholesale_base.Windows.AddProduct"
+﻿<Window x:Class="Wholesale_base.Windows.AddOrder"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Wholesale_base.Windows"
         mc:Ignorable="d"
-        Title="Добавить товар" 
+        Title="Добавить заказ" 
         Height="360" 
         Width="250"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
+
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
@@ -67,35 +69,37 @@
         </DockPanel>
 
         <StackPanel Grid.Row="0" Orientation="Vertical">
-            <TextBlock Text="Поставка: "/>
-            <ComboBox x:Name="ProductDeliveries"                                          
+            <TextBlock Text="Поставщики: "/>
+            <ComboBox x:Name="OrderProducer"                                          
                       IsEditable="True"
                       MinWidth="100"
                       HorizontalAlignment="Left"
                       Margin="5,0,0,0">
                 <ComboBoxItem>
-                    <TextBlock Text="{Binding Path=Id}"/>
+                    <TextBlock Text="{Binding Path=MiddleName}"/>
                 </ComboBoxItem>
             </ComboBox>
-            <TextBlock Text="Тип: "/>
-            <ComboBox x:Name="ProductType"                                          
+
+            <TextBlock Text="Товары: "/>
+            <ComboBox x:Name="OrderProduct"                                          
                       IsEditable="True"
                       MinWidth="100"
                       HorizontalAlignment="Left"
                       Margin="5,0,0,0">
                 <ComboBoxItem>
-                    <TextBlock Text="{Binding Path=Name}"/>
+                    <TextBlock Text="{Binding Path=Description}"/>
                 </ComboBoxItem>
             </ComboBox>
-            
+
             <TextBlock Text="Колличество: "/>
-            <TextBox x:Name="ProductQuantity"/>
-            
-            <TextBlock Text="Цена: "/>
-            <TextBox x:Name="ProductPrice"/>
-            
-            <TextBlock Text="Название: "/>
-            <TextBox x:Name="ProductDescription"/>
+            <TextBox x:Name="OrderQuantity"/>
+
+            <TextBlock Text="Адрес: "/>
+            <TextBox x:Name="OrderAddress"/>
+
+            <TextBlock Text="Дата: "/>
+            <TextBox x:Name="OrderData"
+                     Text="{Binding Source={x:Static sys:DateTime.Now}, Mode=OneWay,  StringFormat='dd-MM-yyyy HH:mm:ss'}"/>
         </StackPanel>
     </Grid>
 </Window>

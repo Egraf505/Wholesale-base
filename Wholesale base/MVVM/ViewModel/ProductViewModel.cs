@@ -56,8 +56,18 @@ namespace Wholesale_base.MVVM.ViewModel
 
             Products = CollectionViewSource.GetDefaultView(_products);
 
+            Products.Filter = FilterProduct;
             Products.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Product.Description)));
             Products.SortDescriptions.Add(new SortDescription(nameof(Product.Id), ListSortDirection.Ascending));
+        }
+
+        private bool FilterProduct(object obj)
+        {
+            if (obj is Product product)
+            {
+                return product.Description.Contains(ProductFilter, StringComparison.InvariantCultureIgnoreCase);               
+            }
+            return false;
         }
 
         private void OnUpdateCollection(WholesalebaseContext context)
@@ -78,14 +88,18 @@ namespace Wholesale_base.MVVM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    AddProduct addDeliveries = new AddProduct();
-                    if (addDeliveries.ShowDialog() == true)
+                    AddProduct addProduct = new AddProduct();
+                    if (addProduct.ShowDialog() == true)
                     {
+                        int count = Convert.ToInt32(addProduct.Count);
+                        int price = Convert.ToInt32(addProduct.Price);
+
                         using (WholesalebaseContext context = new WholesalebaseContext())
                         {
+                            int deliveryid = int.Parse(addProduct.ProductDeliveries.SelectedItem.ToString()!);
                             //Условия тут
-                            Delivery delivery = context.Deliveries.FirstOrDefault()!;
-                            DB.Type type = context.Types.FirstOrDefault()!;                          
+                            Delivery delivery = context.Deliveries.FirstOrDefault(x => x.Id == deliveryid)!;
+                            DB.Type type = context.Types.FirstOrDefault(x => x.Name == addProduct.ProductType.SelectedItem.ToString())!;                         
 
                             if (delivery == null)
                             {
@@ -98,11 +112,11 @@ namespace Wholesale_base.MVVM.ViewModel
                             else
                             {
                                 //Условие к продукту
-                                Product product = new Product {IdDeliveries = delivery.Id, Type = type.Id, CountProductOnWarehouse = AddProduct.CountProduct, Price = AddProduct.Price, Description = AddProduct.Description };
+                                Product product = new Product {IdDeliveries = delivery.Id, Type = type.Id, CountProductOnWarehouse = count, Price = price, Description = addProduct.Description };
                                 context.Products.Add(product);
                                 context.SaveChanges();
 
-                                MessageBox.Show("Товар добавлен добавлена");
+                                MessageBox.Show("Товар добавлен ");
                             }
 
                             OnUpdateCollection(context);
